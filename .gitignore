@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+.run_pid.txt
+.server_stdout.log
+.server_stderr.log
+
+# Build output from Install/build.ps1. setup.exe is the shipped
+# deliverable; it is published in the GitHub release zip, not in git.
+Install/setup.exe
+Install/payload.zip
+Install/setup_standalone.ps1

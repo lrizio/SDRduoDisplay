@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDRduo Display</title>
+<meta name="description" content="SDRduo Display: a free browser-based SDR receiver for the SDRplay RSPduo on Windows. Spectrum, waterfall, AM/FM/WFM/SSB/CW audio and controls in one browser tab.">
+<link rel="icon" href="favicon.png">
+<style>
+  :root {
+    --bg: #14181d; --panel: #1a1f26; --screen: #080d10; --edge: #3a414c;
+    --text: #eef3f8; --dim: #a7b3c0; --faint: #56606b;
+    --green: #57e39a; --blue: #6cb6ff; --amber: #ffbf5f; --red: #ff7a6b;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 16px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif; }
+  a { color: var(--blue); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+  header.top { position: sticky; top: 0; z-index: 10; background: rgba(20,24,29,.92);
+               backdrop-filter: blur(6px); border-bottom: 1px solid var(--edge); }
+  header.top .wrap { display: flex; align-items: center; gap: 24px; height: 56px; }
+  .brand { font-weight: 700; letter-spacing: .14em; text-decoration: none; color: var(--text); white-space: nowrap; }
+  .brand span { color: var(--green); }
+  nav { display: flex; gap: 18px; overflow-x: auto; scrollbar-width: none; }
+  nav::-webkit-scrollbar { display: none; }
+  nav a { color: var(--dim); text-decoration: none; font-size: 14px; white-space: nowrap; }
+  nav a:hover { color: var(--text); }
+
+  .hero { padding: 56px 0 32px; text-align: center; }
+  .hero h1 { font-size: clamp(30px, 6vw, 52px); letter-spacing: .12em; margin: 0 0 8px; }
+  .hero h1 span { color: var(--green); }
+  .hero p.lead { color: var(--dim); font-size: clamp(17px, 2.2vw, 20px); max-width: 720px; margin: 0 auto 28px; }
+  .btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 12px 22px; border-radius: 8px; text-decoration: none; font-weight: 600;
+         color: var(--text); background: linear-gradient(#4a525e, #343a44); border: 1px solid #12161b;
+         box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 2px 6px rgba(0,0,0,.4); }
+  .btn.primary { background: linear-gradient(#3b86cc, #2f6fb0); border-color: #6cb6ff; }
+  .btn:hover { filter: brightness(1.12); }
+  .meta { color: var(--faint); font-size: 14px; margin-top: 14px; }
+
+  .shot { border: 1px solid var(--edge); border-radius: 10px; background: var(--screen); overflow: hidden;
+          box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+  .shot img { display: block; width: 100%; height: auto; }
+
+  section { padding: 48px 0; border-top: 1px solid #22282f; }
+  h2 { font-size: 26px; letter-spacing: .06em; margin: 0 0 6px; }
+  h2::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+               background: var(--green); box-shadow: 0 0 8px var(--green); margin-right: 12px; vertical-align: middle; }
+  .sub { color: var(--dim); margin: 0 0 24px; }
+  .caption { color: var(--dim); margin: 12px 2px 0; }
+  pre.chain { background: var(--screen); border: 1px solid #262d35; border-radius: 8px; padding: 14px 16px;
+              color: var(--green); font-size: 14px; overflow-x: auto; margin: 0 0 24px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--edge); border-radius: 10px; padding: 18px 20px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; color: var(--blue); }
+  .card p { margin: 0; color: var(--dim); font-size: 15px; }
+  ol.steps { padding-left: 22px; } ol.steps li { margin-bottom: 10px; }
+  code { background: var(--screen); border: 1px solid #262d35; border-radius: 4px; padding: 1px 6px; font-size: 14px; }
+
+  .legal { background: var(--panel); border: 1px solid var(--edge); border-left: 4px solid var(--amber);
+           border-radius: 10px; padding: 22px 26px; }
+  .legal h3 { margin: 18px 0 4px; font-size: 16px; color: var(--amber); }
+  .legal h3:first-child { margin-top: 0; }
+  .legal p { margin: 0; color: var(--dim); font-size: 15px; }
+  .warn { color: var(--text); font-weight: 600; }
+
+  footer { border-top: 1px solid #22282f; padding: 28px 0 40px; color: var(--faint); font-size: 13px; }
+  footer p { margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#">SDRDUO <span>DISPLAY</span></a>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#needs">What you need</a>
+      <a href="#start">Get started</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#disclaimer">Disclaimer</a>
+      <a href="https://github.com/lrizio/SDRduoDisplay">GitHub</a>
+      <a href="https://lrizio.github.io/ShackDash/">ShackDash</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+  <div class="hero">
+    <h1>SDRDUO <span>DISPLAY</span></h1>
+    <p class="lead">A free receiver for the SDRplay RSPduo that runs in a browser tab. Your Windows PC does the
+      signal processing and serves the spectrum, waterfall, audio and controls as one web page.</p>
+    <div class="btns">
+      <a class="btn primary" href="https://github.com/lrizio/SDRduoDisplay/releases/latest">Download for Windows</a>
+      <a class="btn" href="SDRduo%20Display%20User%20Guide.pdf">User guide (PDF)</a>
+      <a class="btn" href="https://github.com/lrizio/SDRduoDisplay">View source</a>
+    </div>
+    <p class="meta">Version 0.18 · Windows 10/11 64-bit · Needs an RSPduo and the SDRplay API · MIT licence</p>
+  </div>
+  <div class="shot"><img src="img/receiver.png" alt="SDRduo Display tuned to an AM broadcast station, 200 kHz span" width="1440" height="900"></div>
+  <p class="caption">A real capture: an AM broadcast station on 774 kHz with its sidebands, 200 kHz span.</p>
+</div>
+
+<section id="features">
+  <div class="wrap">
+    <h2>What it does</h2>
+    <p class="sub">Everything lives in one browser page. Close the tab and the receiver keeps running; reopen it and carry on.</p>
+    <pre class="chain">RSPduo --USB--&gt; SDRplay API --DSP (Python)--&gt; local web server --&gt; browser tab</pre>
+    <div class="grid">
+      <div class="card"><h3>Panadapter and waterfall</h3><p>Up to 2 MHz of spectrum with a scrolling waterfall. Click or scroll to tune. Span from 2 MHz down to 10 kHz.</p></div>
+      <div class="card"><h3>Six modes</h3><p>AM, narrow FM, broadcast WFM, USB, LSB and CW, with an audio AGC that keeps the level steady across modes.</p></div>
+      <div class="card"><h3>Gain your way</h3><p>Hardware AGC or manual gain reduction and LNA state. The readout shows what the tuner is really running.</p></div>
+      <div class="card"><h3>Quick tuning</h3><p>Band buttons from 160 m to 70 cm, an on-screen frequency keypad, tuning steps from 10 Hz to 10 kHz and 8 memories.</p></div>
+      <div class="card"><h3>Squelch and S-meter</h3><p>Adjustable squelch, an S-unit meter and an ADC overload warning.</p></div>
+      <div class="card"><h3>Clean shutdown</h3><p>The Exit button releases the RSPduo properly, so the next start finds it straight away.</p></div>
+    </div>
+    <div class="shot" style="margin-top:24px"><img src="img/wide.png" alt="SDRduo Display showing the whole MW broadcast band, 2 MHz span" width="1440" height="900" loading="lazy"></div>
+    <p class="caption">The same band at the full 2 MHz span.</p>
+    <p class="sub" style="margin-top:24px">Not yet: the RSPduo's second tuner, digital-mode decoding, recording, and remembering the last frequency between runs.</p>
+  </div>
+</section>
+
+<section id="needs">
+  <div class="wrap">
+    <h2>What you need</h2>
+    <div class="grid">
+      <div class="card"><h3>An SDRplay RSPduo</h3><p>Connected to the PC by USB. Other RSP models are not supported.</p></div>
+      <div class="card"><h3>The SDRplay API</h3><p>Version 3.15 or newer, from <a href="https://www.sdrplay.com/software/">sdrplay.com/software</a>. It is SDRplay's own software and is not included here.</p></div>
+      <div class="card"><h3>Python 3.10+</h3><p>The installer finds it, or offers to install it through winget.</p></div>
+      <div class="card"><h3>A modern browser</h3><p>Chrome, Edge or Firefox on the same PC.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="start">
+  <div class="wrap">
+    <h2>Get started</h2>
+    <ol class="steps">
+      <li>Install the SDRplay API from <a href="https://www.sdrplay.com/software/">sdrplay.com/software</a> and plug in the RSPduo.</li>
+      <li>Download <code>SDRduoDisplay-0.18-windows.zip</code> from the <a href="https://github.com/lrizio/SDRduoDisplay/releases/latest">latest release</a> and unzip it.</li>
+      <li>Run <code>setup.exe</code>. It is not code-signed, so Windows may say <em>"Windows protected your PC"</em>. Click <em>More info</em>, then <em>Run anyway</em>. It installs to <code>%LOCALAPPDATA%\SDRduoDisplay</code> without administrator rights and downloads the Python packages it needs.</li>
+      <li>Start <b>SDRduo Display</b> from the Desktop or Start Menu shortcut. A browser window opens at <code>http://127.0.0.1:8080</code>. Opening the radio can take up to a minute the first time.</li>
+      <li>Click <b>Enable Audio</b> (browsers will not play sound until you click), and use <b>Exit</b> when you are done.</li>
+    </ol>
+    <p class="sub">Prefer the source? Clone the repository and run <code>start_sdrduo.bat</code>.
+      The <a href="SDRduo%20Display%20User%20Guide.pdf">User Guide</a> explains every control.</p>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="wrap">
+    <h2>Privacy</h2>
+    <p class="sub">SDRduo Display has no telemetry, no analytics and no internet service behind it. The author receives nothing from your copy.</p>
+    <div class="grid">
+      <div class="card"><h3>This computer only</h3><p>The built-in web server listens on <code>127.0.0.1</code> port 8080, so other devices cannot reach it unless you change that yourself. It has no login.</p></div>
+      <div class="card"><h3>Offline once installed</h3><p>It makes no internet connections while running. The installer downloads Python packages from PyPI.</p></div>
+      <div class="card"><h3>Receive only</h3><p>It never transmits. Settings and memories stay in your own browser.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="disclaimer">
+  <div class="wrap">
+    <h2>Disclaimer</h2>
+    <p class="sub">Please read this before using SDRduo Display. The full text is in
+      <a href="https://github.com/lrizio/SDRduoDisplay/blob/main/DISCLAIMER.md">DISCLAIMER.md</a>.</p>
+    <div class="legal">
+      <h3>No warranty</h3>
+      <p>SDRduo Display is a free hobby project provided <b>"as is"</b>, without warranty of any kind, express or implied,
+        under the <a href="https://github.com/lrizio/SDRduoDisplay/blob/main/LICENSE">MIT License</a>. You use it entirely at your own risk.</p>
+      <h3>Limitation of liability</h3>
+      <p>To the maximum extent permitted by law, the author is not liable for any loss or damage of any kind
+        arising from the use of, or inability to use, SDRduo Display or its installer, including damage to equipment,
+        data loss, injury or regulatory infringements.</p>
+      <h3>Not a measuring instrument, not for safety use</h3>
+      <p><span class="warn">The S-meter, levels and frequency readouts are uncalibrated.</span> Do not rely on the program
+        for measurements or to monitor emergency, aviation, marine or other safety-related communications.</p>
+      <h3>Not legal advice</h3>
+      <p>What you may lawfully receive differs between countries. The band buttons are an approximation of the Australian
+        amateur bands. You are solely responsible for complying with your own laws and licence conditions.</p>
+      <h3>Not affiliated with SDRplay</h3>
+      <p>This is an independent project, not affiliated with, endorsed by or supported by SDRplay Limited. "SDRplay" and
+        "RSPduo" are trademarks of their owner. The SDRplay API is SDRplay's own software under its own terms.</p>
+      <h3>Unsigned installer</h3>
+      <p>The installer is a compiled PowerShell script and is not code-signed. Windows SmartScreen or antivirus software may
+        warn about it. Only download it from this project's GitHub page; its source is in the repository.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>SDRduo Display © 2026 VK3EI · Released under the <a href="https://github.com/lrizio/SDRduoDisplay/blob/main/LICENSE">MIT License</a> · Provided as is, without warranty.</p>
+    <p>All trademarks are the property of their owners. SDRduo Display is not affiliated with SDRplay Limited.</p>
+    <p>Questions or bugs: <a href="https://github.com/lrizio/SDRduoDisplay/issues">GitHub Issues</a> · Also by VK3EI: <a href="https://lrizio.github.io/ShackDash/">ShackDash</a>. 73!</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+# reportlab PDFs contain no NUL bytes, so git guesses "text" and autocrlf
+# rewrites their line endings on checkout, corrupting the file.
+*.pdf binary
+*.png binary
+*.ico binary
+*.exe binary
+*.docx binary
