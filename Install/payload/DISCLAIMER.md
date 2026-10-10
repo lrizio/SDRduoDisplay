@@ -65,8 +65,12 @@ optionally install Python through winget. Each is covered by its own licence.
   port 8080. It is not reachable from other devices unless you change that yourself. It has no
   login or encryption, so if you do expose it to a network, anyone who can reach it can control
   the receiver and shut it down. That is at your own risk.
-* While running it makes no internet connections. Internet access is used only during
-  installation, to download the Python packages listed above.
+* While running, the only internet request is an optional update check: when the page opens, your
+  browser makes one small request to GitHub's public "latest release" record for this project
+  (GitHub sees your IP address, as for any web request) and the page shows a notice if a newer
+  version exists. Nothing is downloaded or installed. The **check for updates** tick box in the top
+  bar turns it off. Otherwise internet access is used only during installation, to download the
+  Python packages listed above.
 * Settings such as span, step and memories are stored only in your browser on your PC.
 * SDRduo Display is a receiver. It never transmits.
 

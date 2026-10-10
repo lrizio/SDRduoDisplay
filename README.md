@@ -52,7 +52,7 @@ venv\Scripts\activate
 python run.py
 ```
 
-## Current scope (v0.18)
+## Current scope (v0.20)
 
 - Single active VFO on Tuner A, fixed 2 Msps acquisition, giving a 2 MHz-wide
   panadapter around the tuned frequency.

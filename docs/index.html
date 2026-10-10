@@ -100,7 +100,7 @@
       <a class="btn" href="SDRduo%20Display%20User%20Guide.pdf">User guide (PDF)</a>
       <a class="btn" href="https://github.com/lrizio/SDRduoDisplay">View source</a>
     </div>
-    <p class="meta">Version 0.18 · Windows 10/11 64-bit · Needs an RSPduo and the SDRplay API · MIT licence</p>
+    <p class="meta">Version 0.20 · Windows 10/11 64-bit · Needs an RSPduo and the SDRplay API · MIT licence</p>
   </div>
   <div class="shot"><img src="img/receiver.png" alt="SDRduo Display tuned to an AM broadcast station, 200 kHz span" width="1440" height="900"></div>
   <p class="caption">A real capture: an AM broadcast station on 774 kHz with its sidebands, 200 kHz span.</p>
@@ -142,7 +142,7 @@
     <h2>Get started</h2>
     <ol class="steps">
       <li>Install the SDRplay API from <a href="https://www.sdrplay.com/software/">sdrplay.com/software</a> and plug in the RSPduo.</li>
-      <li>Download <code>SDRduoDisplay-0.18-windows.zip</code> from the <a href="https://github.com/lrizio/SDRduoDisplay/releases/latest">latest release</a> and unzip it.</li>
+      <li>Download <code>SDRduoDisplay-0.20-windows.zip</code> from the <a href="https://github.com/lrizio/SDRduoDisplay/releases/latest">latest release</a> and unzip it.</li>
       <li>Run <code>setup.exe</code>. It is not code-signed, so Windows may say <em>"Windows protected your PC"</em>. Click <em>More info</em>, then <em>Run anyway</em>. It installs to <code>%LOCALAPPDATA%\SDRduoDisplay</code> without administrator rights and downloads the Python packages it needs.</li>
       <li>Start <b>SDRduo Display</b> from the Desktop or Start Menu shortcut. A browser window opens at <code>http://127.0.0.1:8080</code>. Opening the radio can take up to a minute the first time.</li>
       <li>Click <b>Enable Audio</b> (browsers will not play sound until you click), and use <b>Exit</b> when you are done.</li>
@@ -158,7 +158,7 @@
     <p class="sub">SDRduo Display has no telemetry, no analytics and no internet service behind it. The author receives nothing from your copy.</p>
     <div class="grid">
       <div class="card"><h3>This computer only</h3><p>The built-in web server listens on <code>127.0.0.1</code> port 8080, so other devices cannot reach it unless you change that yourself. It has no login.</p></div>
-      <div class="card"><h3>Offline once installed</h3><p>It makes no internet connections while running. The installer downloads Python packages from PyPI.</p></div>
+      <div class="card"><h3>Quiet on the network</h3><p>While running, its only internet request is an optional check of GitHub for a newer release (tick box in the top bar turns it off). The installer downloads Python packages from PyPI.</p></div>
       <div class="card"><h3>Receive only</h3><p>It never transmits. Settings and memories stay in your own browser.</p></div>
     </div>
   </div>

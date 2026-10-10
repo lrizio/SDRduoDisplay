@@ -2,6 +2,22 @@
 
 All notable changes to SDRduo Display are documented here.
 
+## v0.20 — checks GitHub for a newer release
+
+When the page opens, the browser makes one small request to GitHub's
+"latest release" record for this project (after about 4 seconds) and shows
+an amber **UPDATE vX.Y AVAILABLE** badge in the top bar if a newer release
+exists. Nothing is downloaded or installed; it stays silent when offline.
+The **check for updates** tick box in the top bar turns it off (remembered
+in the browser). No receiver changes.
+
+## v0.19 — version number shown in the header
+
+The top bar and the browser tab now show the version (`v0.19`), so it is
+clear which build is running. The number is written in `static/index.html`
+(two places); bump it there, in `README.md` and in `Install/build.ps1` with
+each release. No receiver changes.
+
 ## v0.18 — gain readout showed what we asked for, not what the tuner is doing
 
 Found while investigating whether the hardware AGC was hurting SNR (it
